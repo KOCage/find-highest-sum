@@ -94,4 +94,21 @@ class ArrayAnalyzer
             raise(ArgumentError, 'Invalid Array! Input array must contain two or more integers')
         end
     end
+
+    def self.generateRandomSourceArray(numElements, minValue = 0, maxValue = 100000)
+        array = Array.new
+        for i in 0...numElements
+            newNum = Random.rand(minValue..maxValue)
+            safety = 0
+            while array.include?(newNum)
+                newNum = Random.rand(minValue..maxValue)
+                safety += 1
+                if (safety > 1000)
+                    break
+                end
+            end
+            array << newNum
+        end
+        return array
+    end
 end

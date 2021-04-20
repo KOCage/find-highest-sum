@@ -1,5 +1,6 @@
 require './ArrayAnalyzer'
 require 'rspec'
+require 'benchmark'
 
 RSpec.describe "An ArrayAnalyzer can" do 
     context 'General Functionality' do
@@ -146,6 +147,46 @@ RSpec.describe "An ArrayAnalyzer can" do
                 result = ArrayAnalyzer.findHighestSumWithHighestValues(testArray)
                 expect(result).to match(expectedResult)
             end
+        end
+    end
+    context 'Given the same arrays, both algorithms will succeed, but highest values will be faster' do      
+        it 'Highest Value solution is one hundred times faster than Nested Loop solution with arrays of at least 5000 values' do
+            count = 5000
+            min = 0
+            max = 10000
+            f = 100
+            array1 = ArrayAnalyzer.generateRandomSourceArray(count, min, max)
+            array2 = ArrayAnalyzer.generateRandomSourceArray(count, min, max)
+            array3 = ArrayAnalyzer.generateRandomSourceArray(count, min, max)
+            nLResult = []
+            hVResult = []
+
+            nLTime = Benchmark.realtime{
+                nLResult = ArrayAnalyzer.findHighestSumWithNestedLoops(array1)
+            }
+            hVTime = Benchmark.realtime{
+                hVResult = ArrayAnalyzer.findHighestSumWithHighestValues(array1)
+            }
+            expect(nLResult).to match_array(hVResult)
+            expect(hVTime * f).to be < (nLTime)
+
+            nLTime = Benchmark.realtime{
+                nLResult = ArrayAnalyzer.findHighestSumWithNestedLoops(array2)
+            }
+            hVTime = Benchmark.realtime{
+                hVResult = ArrayAnalyzer.findHighestSumWithHighestValues(array2)
+            }
+            expect(nLResult).to match_array(hVResult)
+            expect(hVTime * f).to be < (nLTime)
+
+            nLTime = Benchmark.realtime{
+                nLResult = ArrayAnalyzer.findHighestSumWithNestedLoops(array3)
+            }
+            hVTime = Benchmark.realtime{
+                hVResult = ArrayAnalyzer.findHighestSumWithHighestValues(array3)
+            }
+            expect(nLResult).to match_array(hVResult)
+            expect(hVTime * f).to be < (nLTime)
         end
     end
 end
